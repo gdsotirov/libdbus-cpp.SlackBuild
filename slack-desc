@@ -1,0 +1,11 @@
+libdbus-c++: DBus C++ (C++ API for DBus)
+libdbus-c++: dbus-c++ attempts to provide a C++ API for D-BUS.  The library
+libdbus-c++: has glib/gtk and an Ecore mainloop integration.  It also offers
+libdbus-c++: an optional own main loop.
+libdbus-c++:
+libdbus-c++:
+libdbus-c++:
+libdbus-c++:
+libdbus-c++:
+libdbus-c++:
+libdbus-c++: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
