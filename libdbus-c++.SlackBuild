@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Slackware build script for DBus C++ API library
-# Copyright (C) 2012 Georgi D. Sotirov <gdsotirov@dir.bg>
+# Copyright (C) 2012-2015 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # 
-# $Id: libdbus-c++.SlackBuild,v 1.1 2012/09/17 11:17:30 gsotirov Exp $
+# $Id: libdbus-c++.SlackBuild,v 1.2 2015/05/19 18:59:07 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -54,7 +54,11 @@ SRC=$TMP/$NAME-$VERSION
 cd $SRC
 fix_source
 
+# Apply patches
+patch -b -z.orig -p1 < $CWD/$NAME-$VERSION.diff || exit 4
+
 # Configure
+ecore_CFLAGS=`pkg-config --cflags ecore` \
 CFLAGS=$SLKCFLAGS \
 CXXFLAGS=$SLKCFLAGS \
 ./configure --build=$ARCH-slackware-linux \
@@ -68,11 +72,11 @@ CXXFLAGS=$SLKCFLAGS \
             --enable-tests \
             --enable-examples \
             --enable-shared=yes \
-            --enable-static=no || exit 4
+            --enable-static=no || exit 5
 
 # Build & install
-make -j4 || exit 5
-make DESTDIR=$PKG install || exit 6
+make -j4 || exit 6
+make DESTDIR=$PKG install || exit 7
 
 # Prepare
 bin_perms $PKG
@@ -85,9 +89,10 @@ install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
 install -m 644 $CWD/slack-required $PKG/install/slack-required
 
 mkdir -p $PKG/usr/src/slackbuilds/$NAME-$VERSION
-install -m 644 $CWD/slack-desc       $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-desc
-install -m 644 $CWD/slack-required   $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-required
-install -m 644 $CWD/$NAME.SlackBuild $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME.SlackBuild
+install -m 644 $CWD/slack-desc          $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-desc
+install -m 644 $CWD/slack-required      $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-required
+install -m 644 $CWD/$NAME-$VERSION.diff $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME-$VERSION.diff
+install -m 644 $CWD/$NAME.SlackBuild    $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME.SlackBuild
 
 # Pack
 cd $PKG
